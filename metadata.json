@@ -1,0 +1,6 @@
+{
+  "name": "Meridian Medical Center",
+  "description": "Comprehensive healthcare portal for Meridian Medical Center featuring real-time emergency wait times, specialist directory, online appointment booking, triage navigator, and patient portal.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
