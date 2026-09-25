@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { ShieldAlert, Clock, AlertTriangle, Phone, CheckCircle2, ChevronRight, Navigation, RefreshCw, HeartPulse, Info } from 'lucide-react';
 import { EMERGENCY_CAMPUSES, TRIAGE_CONDITIONS, EmergencyCampus, TriageCondition } from '../data/hospitalData';
+import { EmergencyWaitChart } from './EmergencyWaitChart';
 
 interface EmergencyTriageSectionProps {
   onOpenBooking: () => void;
@@ -13,20 +14,37 @@ export const EmergencyTriageSection: React.FC<EmergencyTriageSectionProps> = ({
   const [campuses, setCampuses] = useState<EmergencyCampus[]>(EMERGENCY_CAMPUSES);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [lastUpdated, setLastUpdated] = useState('Just now');
-  const [selectedCampus, setSelectedCampus] = useState<EmergencyCampus>(EMERGENCY_CAMPUSES[0]);
+  const [selectedCampusId, setSelectedCampusId] = useState<string>(EMERGENCY_CAMPUSES[0].id);
 
   // Triage state
   const [selectedCondition, setSelectedCondition] = useState<TriageCondition>(TRIAGE_CONDITIONS[0]);
   const [activeCategory, setActiveCategory] = useState<string>('All');
 
+  const selectedCampus = campuses.find(c => c.id === selectedCampusId) || campuses[0];
+
   const handleRefresh = () => {
     setIsRefreshing(true);
     setTimeout(() => {
       // Simulate slight variation in telemetry
-      setCampuses(prev => prev.map(c => ({
-        ...c,
-        currentWaitMinutes: Math.max(2, c.currentWaitMinutes + (Math.random() > 0.5 ? 1 : -1))
-      })));
+      setCampuses(prev => prev.map(c => {
+        const delta = Math.random() > 0.5 ? 1 : -1;
+        const newWait = Math.max(2, c.currentWaitMinutes + delta);
+        const updatedTrend = c.historicalWaitTrend.map((t, idx) => {
+          if (idx === c.historicalWaitTrend.length - 1) {
+            return {
+              ...t,
+              waitMinutes: newWait,
+              patientsWaiting: Math.max(1, t.patientsWaiting + delta)
+            };
+          }
+          return t;
+        });
+        return {
+          ...c,
+          currentWaitMinutes: newWait,
+          historicalWaitTrend: updatedTrend
+        };
+      }));
       setIsRefreshing(false);
       setLastUpdated('Updated just now');
     }, 600);
@@ -92,7 +110,7 @@ export const EmergencyTriageSection: React.FC<EmergencyTriageSectionProps> = ({
               return (
                 <div
                   key={campus.id}
-                  onClick={() => setSelectedCampus(campus)}
+                  onClick={() => setSelectedCampusId(campus.id)}
                   className={`p-5 rounded-xl border text-left cursor-pointer transition-all ${
                     isSelected
                       ? 'border-teal-700 bg-teal-50/30 ring-1 ring-teal-700 shadow-sm'
@@ -139,12 +157,21 @@ export const EmergencyTriageSection: React.FC<EmergencyTriageSectionProps> = ({
                   <div className="mt-4 flex items-center justify-between text-xs pt-2 border-t border-slate-100">
                     <span className="text-slate-600 font-mono text-[11px]">{campus.contactNumber}</span>
                     <span className="text-teal-700 font-medium inline-flex items-center gap-0.5">
-                      Details <ChevronRight className="w-3 h-3" />
+                      {isSelected ? 'Selected' : 'Select'} <ChevronRight className="w-3 h-3" />
                     </span>
                   </div>
                 </div>
               );
             })}
+          </div>
+
+          {/* Historical Wait Time Trend Recharts Mini Bar Chart */}
+          <div className="mt-6">
+            <EmergencyWaitChart
+              campusName={selectedCampus.name}
+              trendData={selectedCampus.historicalWaitTrend}
+              currentWaitMinutes={selectedCampus.currentWaitMinutes}
+            />
           </div>
 
           {/* Selected Campus Quick Actions Bar */}

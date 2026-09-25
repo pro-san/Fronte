@@ -42,6 +42,11 @@ export interface EmergencyCampus {
   status: 'Normal' | 'Moderate' | 'High Demand';
   traumaLevel: string;
   contactNumber: string;
+  historicalWaitTrend: {
+    hourLabel: string;
+    waitMinutes: number;
+    patientsWaiting: number;
+  }[];
 }
 
 export interface TriageCondition {
@@ -81,7 +86,15 @@ export const EMERGENCY_CAMPUSES: EmergencyCampus[] = [
     totalBeds: 100,
     status: 'Normal',
     traumaLevel: 'Level 1 Trauma & Comprehensive Stroke',
-    contactNumber: '(555) 019-2000'
+    contactNumber: '(555) 019-2000',
+    historicalWaitTrend: [
+      { hourLabel: '3 PM', waitMinutes: 18, patientsWaiting: 14 },
+      { hourLabel: '4 PM', waitMinutes: 22, patientsWaiting: 19 },
+      { hourLabel: '5 PM', waitMinutes: 26, patientsWaiting: 24 },
+      { hourLabel: '6 PM', waitMinutes: 19, patientsWaiting: 16 },
+      { hourLabel: '7 PM', waitMinutes: 15, patientsWaiting: 11 },
+      { hourLabel: '8 PM (Now)', waitMinutes: 12, patientsWaiting: 8 }
+    ]
   },
   {
     id: 'north-pavilion',
@@ -93,7 +106,15 @@ export const EMERGENCY_CAMPUSES: EmergencyCampus[] = [
     totalBeds: 50,
     status: 'Normal',
     traumaLevel: 'Level 2 Emergency Care',
-    contactNumber: '(555) 019-2040'
+    contactNumber: '(555) 019-2040',
+    historicalWaitTrend: [
+      { hourLabel: '3 PM', waitMinutes: 12, patientsWaiting: 6 },
+      { hourLabel: '4 PM', waitMinutes: 14, patientsWaiting: 8 },
+      { hourLabel: '5 PM', waitMinutes: 16, patientsWaiting: 11 },
+      { hourLabel: '6 PM', waitMinutes: 11, patientsWaiting: 7 },
+      { hourLabel: '7 PM', waitMinutes: 9, patientsWaiting: 5 },
+      { hourLabel: '8 PM (Now)', waitMinutes: 8, patientsWaiting: 4 }
+    ]
   },
   {
     id: 'pediatric-er',
@@ -105,7 +126,15 @@ export const EMERGENCY_CAMPUSES: EmergencyCampus[] = [
     totalBeds: 40,
     status: 'Normal',
     traumaLevel: 'Level 1 Pediatric Trauma Center',
-    contactNumber: '(555) 019-2088'
+    contactNumber: '(555) 019-2088',
+    historicalWaitTrend: [
+      { hourLabel: '3 PM', waitMinutes: 6, patientsWaiting: 3 },
+      { hourLabel: '4 PM', waitMinutes: 9, patientsWaiting: 6 },
+      { hourLabel: '5 PM', waitMinutes: 11, patientsWaiting: 8 },
+      { hourLabel: '6 PM', waitMinutes: 8, patientsWaiting: 5 },
+      { hourLabel: '7 PM', waitMinutes: 6, patientsWaiting: 4 },
+      { hourLabel: '8 PM (Now)', waitMinutes: 5, patientsWaiting: 2 }
+    ]
   },
   {
     id: 'cardiac-urgent',
@@ -117,7 +146,15 @@ export const EMERGENCY_CAMPUSES: EmergencyCampus[] = [
     totalBeds: 24,
     status: 'Normal',
     traumaLevel: 'Accredited Chest Pain Center v6',
-    contactNumber: '(555) 019-2022'
+    contactNumber: '(555) 019-2022',
+    historicalWaitTrend: [
+      { hourLabel: '3 PM', waitMinutes: 4, patientsWaiting: 2 },
+      { hourLabel: '4 PM', waitMinutes: 5, patientsWaiting: 3 },
+      { hourLabel: '5 PM', waitMinutes: 6, patientsWaiting: 4 },
+      { hourLabel: '6 PM', waitMinutes: 4, patientsWaiting: 2 },
+      { hourLabel: '7 PM', waitMinutes: 3, patientsWaiting: 1 },
+      { hourLabel: '8 PM (Now)', waitMinutes: 3, patientsWaiting: 1 }
+    ]
   }
 ];
 
